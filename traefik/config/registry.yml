@@ -1,0 +1,29 @@
+http:
+  routers:
+    registry-http:
+      entryPoints:
+        - web
+      rule: Host(`{{ env "REGISTRY_DOMAIN" }}`)
+      service: registry
+      middlewares:
+        - registry-force-https
+
+    registry-https:
+      entryPoints:
+        - websecure
+      rule: Host(`{{ env "REGISTRY_DOMAIN" }}`)
+      service: registry
+      tls:
+        certResolver: letsEncrypt
+
+  middlewares:
+    registry-force-https:
+      redirectScheme:
+        scheme: https
+        permanent: true
+
+  services:
+    registry:
+      loadBalancer:
+        servers:
+          - url: http://registry:5000

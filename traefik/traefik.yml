@@ -1,0 +1,25 @@
+global:
+  sendAnonymousUsage: false
+
+log:
+  level: INFO
+
+accessLog: {}
+
+entryPoints:
+  web:
+    address: :80
+
+  websecure:
+    address: :443
+
+providers:
+  file:
+    filename: /etc/traefik/config/registry.yml
+
+certificatesResolvers:
+  letsEncrypt:
+    acme:
+      storage: /etc/traefik/acme/letsEncrypt.json
+      dnsChallenge:
+        provider: cloudflare
